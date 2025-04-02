@@ -25,7 +25,7 @@ if not os.path.exists(MODEL_SAVE_DIR):
     os.makedirs(MODEL_SAVE_DIR)
 
 # --------------------------------------------
-# DEBUT VISUALISATION - OUSSEYNOU
+# DEBUT VISUALISATION - FALL OUSSEYNOU
 # --------------------------------------------
 
 @app.route('/visualisation')
