@@ -1,0 +1,24 @@
+# Flask et extensions
+Flask==2.2.5
+Flask-SQLAlchemy==3.0.5
+
+# Gestion des fichiers CSV et manipulation des données
+pandas==2.0.3
+numpy==1.24.3
+
+# Machine Learning
+scikit-learn==1.2.2
+
+# Versionnement des données avec DVC (Google Drive)
+dvc==3.22.0
+dvc-gdrive==3.0.1  # Extension pour utiliser Google Drive avec DVC
+
+# Outils supplémentaires
+gunicorn==21.2.0  # Pour déployer sur un serveur
+
+# Visualisation des données
+matplotlib==3.7.1
+seaborn==0.12.2
+
+# Sérialisation des modèles
+joblib==1.2.0

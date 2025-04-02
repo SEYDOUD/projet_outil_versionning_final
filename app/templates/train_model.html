@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div class="container">
+    <h1>Entraîner un modèle</h1>
+    <form action="{{ url_for('train_model') }}" method="POST">
+        <label for="model_type">Choisir un modèle :</label>
+        <select name="model_type" id="model_type" required>
+            <option value="Linear Regression">Régression Linéaire</option>
+            <option value="SVM">SVM</option>
+        </select>
+        <input type="hidden" name="file_path" value="{{ request.args.get('file_path') }}">
+        <button type="submit">Entraîner le modèle</button>
+    </form>
+</div>
+{% endblock %}
