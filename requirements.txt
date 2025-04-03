@@ -10,8 +10,8 @@ numpy==1.24.3
 scikit-learn==1.2.2
 
 # Versionnement des données avec DVC (Google Drive)
-dvc==3.22.0
-dvc-gdrive==3.0.1  # Extension pour utiliser Google Drive avec DVC
+dvc
+dvc-gdrive  # Extension pour utiliser Google Drive avec DVC
 
 # Outils supplémentaires
 gunicorn==21.2.0  # Pour déployer sur un serveur
