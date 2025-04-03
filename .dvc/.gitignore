@@ -3,4 +3,4 @@
 /cache
 /config
 config
-config.txt
+.dvc/config
