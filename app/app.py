@@ -8,7 +8,7 @@ import seaborn as sns
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.svm import SVC
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, mean_squared_error, confusion_matrix, classification_report
 from sklearn.preprocessing import LabelEncoder, MinMaxScaler, StandardScaler, RobustScaler, Normalizer
 import os
 import joblib
@@ -93,8 +93,8 @@ def train_model():
             data['date'] = data['date'].astype(int) / 10**9  # Convertir en timestamp
         
         # Séparer les features et la cible
-        X = data.iloc[:, :-1]  # On garde les features
-        y = data.iloc[:, -1]  # On garde la cible (dernier colonne)
+        X = data.iloc[:, 1:]  # On garde les features
+        y = data.iloc[0]  # On garde la cible (dernier colonne)
 
         # Encodage des variables catégoriques dans X
         label_encoders = {}  # Stocker les encodeurs pour plus tard
@@ -111,7 +111,7 @@ def train_model():
         else:
             y_encoder = None
         # Normalisation des données avec RobustScaler
-        scaler = RobustScaler()
+        scaler = MinMaxScaler()
         X_scaled = scaler.fit_transform(X)  # Normalisation
         # Diviser les données en train/test
         X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42)
@@ -134,6 +134,13 @@ def train_model():
 
         # Calculer la précision (uniquement pour classification)
         accuracy = accuracy_score(y_test, y_pred) * 100 if model_type == 'SVM' else None
+        conf_matrix = confusion_matrix(y_test, y_pred) if model_type == 'SVM' else None
+        class_report = classification_report(y_test, y_pred) if model_type == 'SVM' else None
+        print(f"Logistic Regression Accuracy: {accuracy:.4f}") if model_type == 'SVM' else None
+        print("Confusion Matrix:") if model_type == 'SVM' else None
+        print(conf_matrix) if model_type == 'SVM' else None
+        print("Classification Report:") if model_type == 'SVM' else None
+        print(class_report) if model_type == 'SVM' else None
 
         # Sauvegarder le modèle avec joblib
         model_filename = f"{model_type.replace(' ', '_').lower()}_model.pkl"
