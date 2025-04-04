@@ -3,6 +3,7 @@
 {% block body %}
 <div class="container">
     <h1>Bienvenue dans l'application Machine Learning</h1>
+    <h2>Avant tout chargement des données, assurez-vous que toutes les étapes de preprocessing ont été appliquées</h2>
     <form action="{{ url_for('upload_file') }}" method="POST" enctype="multipart/form-data">
         <label for="file">Télécharger un fichier CSV de données :</label>
         <input type="file" name="file" id="file" required>
