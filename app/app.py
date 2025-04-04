@@ -28,31 +28,69 @@ if not os.path.exists(MODEL_SAVE_DIR):
 # DEBUT VISUALISATION - FALL OUSSEYNOU
 # --------------------------------------------
 
+# @app.route('/visualisation')
+# def visualisation():
+#     models = MLModel.query.all()
+#
+#     if models:
+#         # 📊 Graphique 1 : Afficher la précision des modèles entraînés
+#         plt.figure(figsize=(8, 5))
+#         model_names = [model.model_type for model in models]
+#         accuracies = [model.accuracy for model in models]
+#
+#         sns.barplot(x=model_names, y=accuracies, palette="viridis")
+#         plt.title("Précision des modèles entraînés")
+#         plt.xlabel("Modèle")
+#         plt.ylabel("Précision (%)")
+#
+#         # Sauvegarde de l'image dans un dossier static
+#         graph_path = "static/images/model_accuracy.png"
+#         plt.savefig(graph_path)
+#         plt.close()
+#
+#         return render_template('visualisation.html', graph_path=graph_path, models=models)
+#
+#     else:
+#         return "Aucun modèle n'a encore été entraîné."
+
 @app.route('/visualisation')
 def visualisation():
     models = MLModel.query.all()
 
     if models:
-        # 📊 Graphique 1 : Afficher la précision des modèles entraînés
-        plt.figure(figsize=(8, 5))
-        model_names = [model.model_type for model in models]
-        accuracies = [model.accuracy for model in models]
+        # Filtrer les modèles dont la précision est nulle
+        valid_models = [model for model in models if model.accuracy is not None]
 
+        if not valid_models:
+            return "Aucun modèle de classification n'a été entraîné (précision non applicable)."
+
+        # Extraire des données pour le plotting
+        model_names = [model.model_type for model in valid_models]
+        accuracies = [float(model.accuracy) for model in valid_models]  # Ensure numeric type
+
+        # Créez un répertoire static/images si nécessaire
+        image_dir = os.path.join(app.static_folder, 'images')
+        os.makedirs(image_dir, exist_ok=True)
+
+        # Generate the plot
+        plt.figure(figsize=(8, 5))
         sns.barplot(x=model_names, y=accuracies, palette="viridis")
-        plt.title("Précision des modèles entraînés")
+        plt.title("Précision des modèles entraînés (Classification)")
         plt.xlabel("Modèle")
         plt.ylabel("Précision (%)")
-        
-        # Sauvegarde de l'image dans un dossier static
-        graph_path = "static/images/model_accuracy.png"
-        plt.savefig(graph_path)
+
+        # Save the plot
+        graph_file = 'model_accuracy.png'
+        full_path = os.path.join(image_dir, graph_file)
+        plt.savefig(full_path)
         plt.close()
 
+        graph_path = os.path.join('images', graph_file)
         return render_template('visualisation.html', graph_path=graph_path, models=models)
 
     else:
         return "Aucun modèle n'a encore été entraîné."
-    
+
 # --------------------------------------------
 # FIN VISUALISATION - OUSSEYNOU
 # --------------------------------------------
@@ -138,7 +176,7 @@ def train_model():
         db.session.add(new_model)
         db.session.commit()
 
-        return f"Acuracy : "+accuracy
+        # return f"Acuracy : {accuracy}"
         return redirect(url_for('visualisation'))
 
     return render_template('train_model.html')
