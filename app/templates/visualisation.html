@@ -1,10 +1,46 @@
+{#{% extends 'base.html' %}#}
+{##}
+{#{% block body %}#}
+{#<div class="container">#}
+{#    <h1>Visualisation des résultats des modèles</h1>#}
+{#    <h2>Précision des modèles entraînés</h2>#}
+{#    <img src="{{ url_for('static', filename='model_accuracy.png') }}" alt="Graphique des précisions des modèles">#}
+{##}
+{#    <h3>Liste des modèles entraînés :</h3>#}
+{#    <table>#}
+{#        <thead>#}
+{#            <tr>#}
+{#                <th>Nom du modèle</th>#}
+{#                <th>Précision (%)</th>#}
+{#                <th>Fichier du modèle</th>#}
+{#                <th>Date d'entraînement</th>#}
+{#            </tr>#}
+{#        </thead>#}
+{#        <tbody>#}
+{#            {% for model in models %}#}
+{#                <tr>#}
+{#                    <td>{{ model.model_type }}</td>#}
+{#                    <td>{{ model.accuracy }}%</td>#}
+{#                    <td><a href="{{ model.model_path }}" download>{{ model.model_path }}</a></td>#}
+{#                    <td>{{ model.date_created }}</td>#}
+{#                </tr>#}
+{#            {% endfor %}#}
+{#        </tbody>#}
+{#    </table>#}
+{#</div>#}
+{#{% endblock %}#}
 {% extends 'base.html' %}
 
 {% block body %}
 <div class="container">
     <h1>Visualisation des résultats des modèles</h1>
     <h2>Précision des modèles entraînés</h2>
-    <img src="{{ url_for('static', filename='model_accuracy.png') }}" alt="Graphique des précisions des modèles">
+
+    {% if graph_path %}
+        <img src="{{ url_for('static', filename=graph_path) }}" alt="Graphique des précisions des modèles">
+    {% else %}
+        <p>Aucun graphique disponible (modèles de classification uniquement).</p>
+    {% endif %}
 
     <h3>Liste des modèles entraînés :</h3>
     <table>
@@ -20,7 +56,7 @@
             {% for model in models %}
                 <tr>
                     <td>{{ model.model_type }}</td>
-                    <td>{{ model.accuracy }}%</td>
+                    <td>{{ "%.2f"|format(model.accuracy) if model.accuracy else 'N/A' }}%</td>
                     <td><a href="{{ model.model_path }}" download>{{ model.model_path }}</a></td>
                     <td>{{ model.date_created }}</td>
                 </tr>
