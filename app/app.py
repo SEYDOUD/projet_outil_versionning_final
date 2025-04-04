@@ -120,11 +120,6 @@ def train_model():
         # Charger les données
         data = pd.read_csv(file_path)
 
-        # Prepocessing des données
-        # Les données doivent être vérifiées et prêtes pour l'entraînement avant d'être chargées.
-
-
-
         # Vérifier si la colonne 'date' existe et la convertir
         if 'date' in data.columns:
             data['date'] = pd.to_datetime(data['date'], errors='coerce')  # Convertir en datetime
@@ -148,11 +143,9 @@ def train_model():
             y = y_encoder.fit_transform(y)  # Convertir les classes en nombres
         else:
             y_encoder = None
-        # Normalisation des données avec RobustScaler
-        scaler = RobustScaler()
-        X_scaled = scaler.fit_transform(X)  # Normalisation
+
         # Diviser les données en train/test
-        X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42)
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
         # Convertir en `numpy.ndarray`
         X_train = X_train.values
