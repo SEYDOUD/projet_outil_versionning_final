@@ -4,28 +4,27 @@ pipeline {
     environment {
         DATA_FILE = 'data\\processed\\data.csv' // Chemin Windows avec double antislash
     }
-    
+
     stages {
         stage('Inject GDrive Secrets') {
             steps {
                 withCredentials([
-                    string(credentialsId: 'GDRIVE_CLIENT_ID', '760292635713-ag06l6fh6rdq35tv6lgc2n2isvet511p.apps.googleusercontent.com'),
-                    string(credentialsId: 'GDRIVE_CLIENT_SECRET', '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')
+                    string(credentialsId: 'GDRIVE_CLIENT_ID', variable: 'GDRIVE_CLIENT_ID'),
+                    string(credentialsId: 'GDRIVE_CLIENT_SECRET', variable: 'GDRIVE_CLIENT_SECRET')
                 ]) {
                     bat 'echo Client ID: %GDRIVE_CLIENT_ID%'
                     bat 'echo Client Secret: %GDRIVE_CLIENT_SECRET%'
-                    
-                    // Tu peux aussi écrire ces valeurs dans un fichier de conf utilisé par DVC
+
+                    // Écrire les valeurs dans un fichier de config DVC
                     bat '''
-                    echo [remote "gdrive"] > .dvc/config.local
-                    echo \tclient_id = %GDRIVE_CLIENT_ID% >> .dvc/config.local
-                    echo \tclient_secret = %GDRIVE_CLIENT_SECRET% >> .dvc/config.local
+                    echo [remote "gdrive"] > .dvc\\config.local
+                    echo     client_id = %GDRIVE_CLIENT_ID% >> .dvc\\config.local
+                    echo     client_secret = %GDRIVE_CLIENT_SECRET% >> .dvc\\config.local
                     '''
+                }
             }
         }
-    }
 
-    stages {
         stage('Clone Repository') {
             steps {
                 git branch: 'main', url: 'https://github.com/SEYDOUD/projet_outil_versionning_final.git'
@@ -38,12 +37,12 @@ pipeline {
                 bat 'pip install dvc'
             }
         }
-        
+
         stage('DVC Add') {
-           steps {
+            steps {
                 bat '''
-                    dvc add uploads/IRIS.csv
-                    dvc push
+                dvc add uploads/IRIS.csv
+                dvc push
                 '''
             }
         }
