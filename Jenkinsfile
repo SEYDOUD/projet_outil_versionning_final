@@ -5,7 +5,7 @@ pipeline {
         DATA_FILE = 'data\\processed\\data.csv' // Chemin Windows avec double antislash
     }
     
-       stages {
+    stages {
         stage('Inject GDrive Secrets') {
             steps {
                 withCredentials([
@@ -21,9 +21,9 @@ pipeline {
                     echo \tclient_id = %GDRIVE_CLIENT_ID% >> .dvc/config.local
                     echo \tclient_secret = %GDRIVE_CLIENT_SECRET% >> .dvc/config.local
                     '''
-                }
             }
         }
+    }
 
     stages {
         stage('Clone Repository') {
