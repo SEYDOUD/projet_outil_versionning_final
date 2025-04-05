@@ -3,25 +3,14 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git 'https://github.com/votre-repo/ml_app.git'
+                git 'https://github.com/SEYDOUD/projet_outil_versionning_final'
             }
         }
-        stage('Install Dependencies') {
+
+        stage('Push Data to DVC') {
             steps {
-                sh 'pip install -r requirements.txt'
-            }
-        }
-        stage('Run Tests') {
-            steps {
-                sh 'pytest tests/'
-            }
-        }
-        stage('Train Model') {
-            steps {
-                sh 'python app/model_training.py'
-            }
-        }
-        stage('Push Model to DVC') {
+                sh 'dvc add uploads/IRIS.csv'
+            },
             steps {
                 sh 'dvc push'
             }
