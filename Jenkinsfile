@@ -10,7 +10,7 @@ pipeline {
         stage('Push Data to DVC') {
             steps {
                 sh 'dvc add uploads/IRIS.csv'
-            },
+            }
             steps {
                 sh 'dvc push'
             }
